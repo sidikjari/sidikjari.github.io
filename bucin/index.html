@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bucin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="icon" href="https://gamepedia.cursecdn.com/minecraft_gamepedia/a/a7/Heart.svg?version=dac1a46352ab4c25ad78a3cef0ceea86" type="image/png" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style type="text/css">
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
+
+*{
+	padding: 0;
+	margin: 0;
+	font-family: 'inter', sans-serif;
+}
+body{
+	height: 92vh; 
+	/*
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	*/
+	background: url("background.jpg") no-repeat center center fixed;
+	background-size: cover;
+}
+#container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.bg{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+.modal{
+  width: 500px;
+  height: auto;
+  // margin: 40px auto;
+  border-radius: 12px;
+  background-color: red;
+  overflow: hidden;
+  position: relative;
+}
+.modal .modal-header{
+  top: 0;
+  width: 100%;
+  background-color: #ddd;
+}
+.modal .modal-header .button{
+  position: absolute;
+  top: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.modal .modal-header .button:before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+}
+.modal .modal-header .button:after{
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+.modal .modal-header .button.red{
+  left: 10px;
+  background-color: #D2493F;
+  border: 1px solid #7b1c1a;
+  box-shadow: 0 1px 2px #401110;
+}
+.modal .modal-header .button.red:active{
+  box-shadow: 0 1px 1px #401110;
+}
+.modal .modal-header .button.yellow{
+  left: 37px;
+  background-color: #F1B330;
+  border: 1px solid #C66A34;
+  box-shadow: 0 1px 2px #8A7663;
+}
+.modal .modal-header .button.yellow:active{
+  box-shadow: 0 1px 1px #8A7663;
+}
+.modal .modal-header .button.yellow:after {
+  background: radial-gradient(ellipse at center, #f8fa98 0%, rgba(247, 206, 64, 0) 100%);
+}
+.modal .modal-header .button.green{
+  left: 64px;
+  background-color: #70BF3A;
+  border: 1px solid #063F07;
+  box-shadow: 0 1px 2px #658961;
+}
+.modal .modal-header .button.green:active{
+  box-shadow: 0 1px 1px #658961;
+}
+.modal .modal-header .button.green:after{
+  background: radial-gradient(ellipse at center, #e2fbb6 0%, rgba(146, 215, 78, 0) 100%);
+}
+.modal .modal-header h1{
+  font-weight: normal;
+  font-size: 20px;
+  text-align: center;
+  margin: 0;
+  padding: 5px 0;
+  color: #696969;
+}
+.modal-content{
+    background: #eee;
+}
+.modal-body{
+    padding: 20px;
+    font-size: 15px;
+}
+.modal-body h1{
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 600;
+}
+.modal-body label {
+    font-size: 17px;
+    line-height: 50px;
+}
+.modal-body .inputName{
+    width: 80%;
+    border: 1px solid #c6c6c6;
+    padding: 4px;
+    outline: none;
+    border-radius: 5px;
+    font-size: 17px;
+}
+.modal-footer{
+    width: 100%;
+    padding: 5px 10px 10px 10px;
+    position: relative;
+    text-align: right;
+    right: 25px;
+}
+.modal-footer .choose{
+    width: 80px;
+    border: 1px solid #c6c6c6;
+    background: #fff;
+    height: 30px;
+	line-height: 30px;
+	bottom: 20px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 5px;
+    pointer: cursor;
+    margin-left: 10px;
+    text-align: center;
+}
+.modal-footer .choose:last-child{
+    background: rgb(10,107,254);
+	background: linear-gradient(0deg, rgba(10,107,254,1) 0%, rgba(106,163,252,1) 100%);
+	color: #FFFFFF;
+	border: 1px solid #015FFC;
+}
+#bucin, #video-box{ /* extra */
+    display: none;
+}
+#myVideo{
+    width: 650px;
+    margin: auto;
+    border-radius: 20px;
+}
+.main{
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+.box{
+    width: 100%;
+    height: 100%;
+}
+.box:first-child{
+    position: relative;
+    top: 80px;
+}
+#options{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+.toggle{
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: 600;
+    text-align: center;
+    background: #00000080;
+    width: 200px;
+    padding: 10px 5px;
+    border-radius: 5px;
+    transition: background ease 0.3s;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+}
+.toggle:first-child{
+    border: none;
+    outline: none;
+}
+#clock{
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    font-weight: 600;
+}
+#time {
+    font-size: 8em;
+}
+#date{
+    font-size: 2em;
+}
+#search{
+    display: flex;
+    width: 800px;
+    height: auto;
+    margin-top: 20px;
+}
+#search input[type=text]{
+    width: 100%;
+    font-size: 2em;
+    padding: 15px 10px 5px 10px;
+    border-bottom: 2px solid #fff;
+    border: none;
+    border-bottom: 2px solid #fff;
+    outline: none;
+    background-color: transparent;
+    color: #fff;
+}
+::-webkit-input-placeholder { color: #fff; } 
+:-moz-placeholder { color: #fff; }
+::-moz-placeholder { color: #fff; }
+:-ms-input-placeholder { color: #fff; }
+
+#button-search{
+    border: none;
+    outline: none;
+    background: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px;
+}
+#greet{
+    width: 100%;
+    height: 250px;
+    text-align: center;
+    font-size: 4em;
+    font-weight: 600;
+    //text-shadow: 1px 1px 1px #000;
+}
+#footer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#quote{
+    position: absolute;
+    margin: 0 10px;
+    bottom: 10px;
+    font-size: 2em;
+    color: #fff;
+    text-align: center;
+}
+
+.preloader{
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0 , 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    color: #fff;
+    font-size: 3em;
+    transition: all ease 1s;
+}
+</style>
+<body onload="init()">
+<div id="container" class="bg">
+<div id="loading" class="preloader">
+    <i class="fa fa-circle-o-notch fa-2x fa-spin" aria-hidden="true"></i>
+</div>
+
+<audio id="endAudio">
+	<source src="music.mp3" type="audio/mpeg">
+	Your browser does not support the audio element.
+</audio>
+<audio id="openAudio">
+	<source src="opening.mp3" type="audio/mpeg">
+	Your browser does not support the audio element.
+</audio>
+
+<div id="video-box">
+	<video id="myVideo" width="100%" height="100%">
+		   <source src="video.mp4" type="video/mp4">
+		    Your browser doe`s not support HTML5 video.
+	</video>
+</div>
+
+<div class="modal" id="registrasi">
+  <div class="modal-header">
+    <button class="button red"></button>
+    <button class="button yellow"></button>
+    <button class="button green"></button>
+    <h1>Registrasi</h1>
+  </div>
+  <div class="modal-content">
+      <div class="modal-body">
+          <h1>Masukan nama kamu dulu ya.</h1>
+          <label>
+              name :
+          </label>
+          <input type="text" name="name" class="inputName" autocomplete="off" />
+      </div>
+      <div class="modal-footer">
+          <button class="choose" onclick="register()">Ya</button>
+      </div>
+    </div>
+</div>
+
+<div class="modal" id="bucin">
+  <div class="modal-header">
+    <button class="button red"></button>
+    <button class="button yellow"></button>
+    <button class="button green"></button>
+    <h1 class="modal-title"></h1>
+  </div>
+  <div class="modal-content">
+      <div class="modal-body">
+          <h1>Maukah kamu jadi pacarku?</h1>
+          Cintaku padamu bagai diare. Tak bisa kutahan, terus keluar begitu saja.
+      </div>
+      <div class="modal-footer">
+          <button class="choose" id="no" onclick="nope()">Tidak</button>
+          <button class="choose" onclick="yeah()">Ya</button>
+      </div>
+    </div>
+</div>
+
+<div class="main">
+    <div class="box">
+        <div id="options">
+            <span class="toggle" id="myname" onclick="edit()">anonymous</span>
+            <div class="toggle" onclick="restart()">Restart</div>
+        </div>
+    </div>
+    <div class="box" id="clock">
+        <div id="time">
+            HH:MM:SS PE
+        </div>
+        <div id="date">
+            DD, MM DD YY
+        </div>
+    </div>
+    <div class="box" id="greet" style="color:#fff;"></div>
+    <div class="box" id="search">
+        <input type="text" class="inputSearch" name="search" placeholder="search something..." autocomplete="off" />
+	    <button type="button" id="button-search">
+	       <i class="fa fa-search fa-2x" aria-hidden="true"></i>
+	    </button>
+    </div>
+    <div class="box" id="footer">
+        <span id="quote"></span>
+    </div>
+</div>
+
+
+</div>
+
+<script>
+
+window.addEventListener('load', () => preloader());
+
+function init(){
+    quotes();
+    setInterval(setClock, 1);
+    if(localStorage.getItem('name') != null && localStorage.getItem('yeah') != null){
+        document.querySelector('.modal').style.display = 'none';
+        mainPage(true);
+    }
+}
+
+function preloader(){
+    const pre = document.querySelector('.preloader');
+    setTimeout(() => {
+        pre.style.display = 'none';
+        pre.style.zIndex = -2;
+    }, 2000);
+}
+
+function register(){
+    let name = document.querySelector('.inputName');
+    if(name.value){
+        localStorage.setItem('name', name.value);
+        document.getElementById('registrasi').style.display = 'none';
+        document.getElementById('bucin').style.display = 'inline-block';
+        document.querySelector('.modal-title').innerText = 'Hallo '+localStorage.getItem('name');
+        opening();
+    }
+    name.value = '';
+}
+
+function nope(){
+    const bucin = document.getElementById('bucin');
+    let x = Math.floor(Math.random()*1500);
+    let y = Math.floor(Math.random()*500);
+    bucin.style.transition = 'all 1s ease';
+    bucin.style.position = 'absolute';
+    bucin.style.marginTop = `calc(${x}px - 100%)`;
+    bucin.style.marginLeft = `calc(${y}px - 30%)`;
+}
+
+function reset(){
+    const bucin = document.getElementById('bucin');
+    bucin.style.marginTop = 0;
+    bucin.style.marginLeft = 0;
+}
+
+function yeah(){
+    opening(true);
+    localStorage.setItem('yeah', true);
+    document.getElementById('bucin').style.display = 'none';
+    const videoBox = document.getElementById('video-box');
+    videoBox.style.display = 'block';
+    const video = document.getElementById('myVideo');
+    video.play();
+    video.addEventListener('ended', myHandler, false);
+    function myHandler(e) {
+        // What you want to do after the event
+        videoBox.style.display = 'none';
+        mainPage(false);
+    }
+}
+
+function mainPage(endingSong){
+    ending(endingSong);
+    const bg = document.querySelector('.bg');
+    bg.classList.remove('bg');
+    document.querySelector('.main').style.display = 'flex';
+    document.getElementById('myname').innerText = localStorage.getItem('name');
+}
+
+function edit(){
+    const name = document.getElementById('myname');
+    name.remove();
+    console.log('clicked')
+    const input = document.createElement('input');
+    input.className = 'toggle';
+    input.id = 'setName';
+    input.autofocus = true;
+    document.getElementById('options').prepend(input);
+    input.addEventListener('keypress', e => {
+        if(e.keyCode == 13) editok();
+    });
+}
+
+function editok(){
+    const input = document.getElementById('setName');
+    localStorage.setItem('name', input.value);
+    input.remove();
+    const span = document.createElement('span');
+    span.onclick = () => edit();
+    span.id = 'myname';
+    span.className = 'toggle';
+    span.innerText = localStorage.getItem('name');
+    document.getElementById('options').prepend(span);
+}
+
+function greetings(time){
+    document.getElementById('greet').innerText = `Selamat ${time}, ${localStorage.getItem('name')}`;
+}
+
+function setClock(){
+    const now = new Date();
+	const dStr = now.getDay();
+	const month = now.getMonth();
+	const dNum = now.getDate();
+	const year = now.getFullYear();
+	let hour = now.getHours();
+	let min = now.getMinutes();
+	//let sec = now.getSeconds();
+	let pe = 'AM';
+	
+	if(hour >= 6 && hour < 10){
+		greetings('pagi');
+	}
+	if(hour >= 10 && hour < 16){
+		greetings('siang');
+	}
+	if(hour >= 16 && hour < 18){
+		greetings('sore');
+	}
+	if(hour >= 18 || hour >= 0 && hour < 6){
+		greetings('malam');
+	}
+	
+	if(hour > 12){
+	    hour -= 12;
+	    pe = 'PM'
+	}
+	if(hour == 0) hour = 12;
+	
+	if(hour < 10) hour = '0'+hour;
+	if(min < 10) min = '0'+min;
+	//if(sec < 10) sec = '0'+sec;
+	const time = document.getElementById('time');
+	time.innerText = `${hour}:${min} ${pe}`;
+	const weekDay = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	const date = document.getElementById('date');
+	date.innerText = `${weekDay[dStr]}, ${months[month]} ${dNum} ${year}`;
+}
+
+function opening(isPause){
+    const audio = document.getElementById('openAudio');
+    audio.volume = 0.7;
+    (isPause) ? audio.pause() : audio.play();
+}
+
+function ending(isPause){
+    const audio = document.getElementById('endAudio');
+    audio.volume = 0.3;
+    if(isPause){
+        audio.pause();
+        audio.currentTime = 0;
+    }else{
+        audio.play();
+    }
+}
+
+const inputSearch = document.querySelector('.inputSearch');
+inputSearch.addEventListener('keyup', e => {
+    if(inputSearch.value != ''){
+        if(e.keyCode == 13){
+            document.getElementById('button-search').click();
+        }
+    }
+});
+document.getElementById('button-search').onclick = function(e){
+    search(inputSearch.value);
+}
+
+function search(value){
+    if(value == '') return;
+    window.location.href = 'https://www.google.com/search?q='+value;
+}
+
+async function quotes(){
+    const data = await fetch("https://type.fit/api/quotes");
+    const result = await data.json();
+    const random = Math.floor(Math.random() * result.length);
+    document.getElementById('quote').innerText = `"${result[random].text}"`;
+}
+
+function restart(){
+    ending(true);
+    reset();
+    document.querySelector('.main').style.display = 'none';
+    document.getElementById('container').classList.add('bg');
+    document.querySelector('.modal').style.display = 'block';
+    localStorage.clear();
+}
+
+</script>
+</body>
+</html>
