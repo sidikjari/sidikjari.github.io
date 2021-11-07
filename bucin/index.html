@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bucin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+<link rel="icon" href="https://gamepedia.cursecdn.com/minecraft_gamepedia/a/a7/Heart.svg?version=dac1a46352ab4c25ad78a3cef0ceea86" type="image/png" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style type="text/css">
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    body, html{
+        height: 100%;
+    }
+    #bg{
+        background: url("background.jpg") no-repeat center center fixed;
+        background-size: cover;
+        height: 100%;
+    }
+    #container{
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+    #bucin{
+        display: none;
+    }
+    .modal{
+      width: 500px;
+      height: auto;
+      //margin: auto;
+      border-radius: 12px;
+      background-color: red;
+      overflow: hidden;
+      position: relative;
+    }
+    .modal .modal-header{
+      top: 0;
+      width: 100%;
+      background-color: #ddd;
+    }
+    .modal .modal-header .button{
+      position: absolute;
+      top: 5px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .modal .modal-header .button:before{
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+    }
+    .modal .modal-header .button:after{
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      width: 100%;
+      height: 20px;
+    }
+    .modal .modal-header .button.red{
+      left: 10px;
+      background-color: #D2493F;
+      border: 1px solid #7b1c1a;
+      box-shadow: 0 1px 2px #401110;
+    }
+    .modal .modal-header .button.red:active{
+      box-shadow: 0 1px 1px #401110;
+    }
+    .modal .modal-header .button.yellow{
+      left: 37px;
+      background-color: #F1B330;
+      border: 1px solid #C66A34;
+      box-shadow: 0 1px 2px #8A7663;
+    }
+    .modal .modal-header .button.yellow:active{
+      box-shadow: 0 1px 1px #8A7663;
+    }
+    .modal .modal-header .button.yellow:after {
+      background: radial-gradient(ellipse at center, #f8fa98 0%, rgba(247, 206, 64, 0) 100%);
+    }
+    .modal .modal-header .button.green{
+      left: 64px;
+      background-color: #70BF3A;
+      border: 1px solid #063F07;
+      box-shadow: 0 1px 2px #658961;
+    }
+    .modal .modal-header .button.green:active{
+      box-shadow: 0 1px 1px #658961;
+    }
+    .modal .modal-header .button.green:after{
+      background: radial-gradient(ellipse at center, #e2fbb6 0%, rgba(146, 215, 78, 0) 100%);
+    }
+    .modal .modal-header h1{
+      font-weight: normal;
+      font-size: 20px;
+      text-align: center;
+      margin: 0;
+      padding: 5px 0;
+      color: #696969;
+    }
+    .modal-content{
+        background: #eee;
+    }
+    .modal-body{
+        padding: 20px;
+        font-size: 15px;
+    }
+    .modal-body h1{
+        font-size: 20px;
+        line-height: 30px;
+        font-weight: 600;
+    }
+    .modal-body label {
+        font-size: 17px;
+        line-height: 50px;
+    }
+    .modal-body .inputName{
+        width: 80%;
+        border: 1px solid #c6c6c6;
+        padding: 4px;
+        outline: none;
+        border-radius: 5px;
+        font-size: 17px;
+    }
+    .modal-footer{
+        width: 100%;
+        padding: 5px 10px 10px 10px;
+        position: relative;
+        text-align: right;
+        right: 25px;
+    }
+    .modal-footer .choose{
+        width: 80px;
+        border: 1px solid #c6c6c6;
+        background: #fff;
+        height: 30px;
+    	line-height: 30px;
+    	bottom: 20px;
+        font-size: 15px;
+        font-weight: 500;
+        border-radius: 5px;
+        pointer: cursor;
+        margin-left: 10px;
+        text-align: center;
+        outline: none;
+    }
+    .modal-footer .choose:first-child, #btnName{
+        background: rgb(10,107,254);
+    	background: linear-gradient(0deg, rgba(10,107,254,1) 0%, rgba(106,163,252,1) 100%);
+    	color: #FFFFFF;
+    	border: 1px solid #015FFC;
+    }
+    .modal-footer .choose:last-child{
+        background: rgb(210, 4, 45);
+    	background: linear-gradient(0deg, rgba(210, 4, 45) 0%, rgba(252, 106, 106, 1) 100%);
+    	color: #FFFFFF;
+    	border: 1px solid #FF0008;
+    }
+    #video-box{
+        display: none;
+        width: 100%;
+    }
+    #myVideo{
+        width: 850px;
+        margin: auto;
+        border-radius: 20px;
+    }
+    #main{
+        display: none;
+        flex-wrap: wrap;
+        height: 100%;
+        color: white;
+        justify-content: center;
+        align-items: center;
+    }
+    .box{
+        width: 100%;
+    }
+    #bar{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .toggle{
+        width: 100px;
+        padding: 10px;
+        margin: 2px auto;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        backdrop-filter: blur(8px);
+        cursor: pointer;
+        text-align: center;
+        text-shadow: 1px 1px #000;
+    }
+    .toggle:first-child{
+        border: none;
+        outline: none;
+        color: #fff;
+        font-size: 1em;
+    }
+    #dates{
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+    }
+    #time{
+        font-size: 4em;
+        text-shadow: 1px 1px #000;
+    }
+    #date, #greet{
+        font-size: 1.5em;
+        text-shadow: 1px 1px #000;
+    }
+    #greet{
+        text-align: center;
+    }
+    #searchBox{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #searchBox input[type=text]{
+        width: 85%;
+        font-size: 1em;
+        padding: 15px 10px 5px 10px;
+        border-bottom: 2px solid #fff;
+        border: none;
+        border-bottom: 2px solid #fff;
+        outline: none;
+        background-color: transparent;
+        text-shadow: 1px 1px #000;
+        color: #fff;
+    }
+    ::-webkit-input-placeholder{ color: #fff; font-style: italic; } 
+    :-moz-placeholder { color: #fff; font-style: italic; }
+    ::-moz-placeholder { color: #fff; }
+    :-ms-input-placeholder { color: #fff; font-style: italic; }
+    #button-search{
+        border: none;
+        outline: none;
+        background: none;
+        color: #fff;
+        cursor: pointer;
+        padding: 10px;
+    }
+    #searchBox span{
+        font-size: 1.2em;
+        text-shadow: 1px 1px #000;
+    }
+    #quote{
+        text-align: center;
+        text-shadow: 1px 1px #000;
+        font-style: italic;
+    }
+    #preloader{
+        height: 100%;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { 
+            transform: rotate(0deg); 
+        }
+        100% { 
+            transform: rotate(360deg);
+        }
+    }
+</style>
+<body>
+    <audio id="startsong">
+	    <source src="opening.mp3" type="audio/mpeg">
+	    Your browser does not support the audio element.
+    </audio>
+    <audio id="endAudio">
+	    <source src="music.mp3" type="audio/mpeg">
+	    Your browser does not support the audio element.
+    </audio>
+    <div id="preloader">
+        <div id="loader"></div>
+    </div>
+    <div id="bg">
+    <div id="container">
+        <div id="video-box">
+        	<video id="myVideo" width="100%" height="100%">
+        		   <source src="video.mp4" type="video/mp4">
+        		    Your browser doe`s not support HTML5 video.
+        	</video>
+        </div>
+    
+        <div class="modal" id="modalName">
+          <div class="modal-header">
+            <button class="button red"></button>
+            <button class="button yellow"></button>
+            <button class="button green"></button>
+            <h1>Registrasi</h1>
+          </div>
+          <div class="modal-content">
+              <div class="modal-body">
+                  <h1>Masukan nama kamu dulu ya.</h1>
+                  <label>
+                      nama :
+                  </label>
+                  <input type="text" name="name" class="inputName" autocomplete="off" />
+              </div>
+              <div class="modal-footer">
+                  <button id="btnName" class="choose" onclick="inputName()">Ya</button>
+              </div>
+            </div>
+        </div>
+        <div class="modal" id="bucin">
+          <div class="modal-header">
+            <button class="button red"></button>
+            <button class="button yellow"></button>
+            <button class="button green"></button>
+            <h1 class="modal-title"></h1>
+          </div>
+          <div class="modal-content">
+              <div class="modal-body">
+                  <h1>Maukah kamu jadi pacarku?</h1>
+                  Cintaku padamu bagai diare. Tak bisa kutahan, terus keluar begitu saja.
+              </div>
+              <div class="modal-footer">
+                  <button class="choose" onclick="received()">Ya</button>
+                  <button class="choose" id="no" onclick="rejected()">Tidak</button>
+              </div>
+            </div>
+        </div>
+        
+        <div id="main">
+            <div id="bar" class="box">
+                <span class="toggle" id="myName" onclick="editName()">anonymous</span>
+                <div class="toggle" onclick="restart()">Restart</div>
+            </div>
+             <div id="dates" class="box">
+                <div id="time">
+                    HH:MM:SS PE
+                </div>
+                <div id="date">
+                    DD, MM DD YY
+                </div>
+            </div>
+            <div id="greet" class="box">
+                <h1>Hallo There!</h1>
+            </div>
+             <div id="searchBox" class="box">
+                <input type="text" class="inputSearch" name="search" placeholder="looking for something?.." autocomplete="off" />
+        	    <button type="button" id="button-search">
+        	       <i class="fa fa-search fa-2x" aria-hidden="true"></i>
+        	    </button>
+            </div>
+             <div id="quote" class="box">
+                <h1>Quotes</h1>
+            </div>
+        </div>
+
+    </div>
+    </div>
+    
+    <script>
+    window.addEventListener('load', () => {
+        setInterval(setDates, 1);
+        if(localStorage.getItem('name') != null){
+            document.querySelector('.modal').style.display = 'none';
+            document.getElementById('preloader').style.display = 'none';
+            mainPage();
+        }
+        document.getElementById('preloader').style.display = 'none';
+        inputName();
+    });
+    
+    function inputName(){
+        let name = document.querySelector('.inputName').value;
+        if(name){
+            localStorage.setItem('name', name);
+            document.getElementById('modalName').style.display = 'none';
+            showName();
+        }
+        name = '';
+    }
+    
+    function showName(){
+        document.querySelector('.modal-title').innerText = 'Hallo '+localStorage.getItem('name');
+        document.getElementById('bucin').style.display = 'block';
+        openingSong();
+    }
+    
+    function rejected(){
+        const bucin = document.getElementById('bucin');
+        if(document.documentElement.clientWidth < 980){
+            let x = Math.floor(Math.random()*document.documentElement.clientHeight);
+            bucin.style.transition = 'all 1s ease';
+            bucin.style.marginTop = `calc(${x}px - 100%)`;
+        }
+        if(document.documentElement.clientWidth >= 980){
+            let x = Math.floor(Math.random()*1500);
+            let y = Math.floor(Math.random()*1000);
+            bucin.style.transition = 'all 1s ease';
+            bucin.style.marginTop = `calc(${x}px - 100%)`;
+            bucin.style.marginLeft = `calc(${y}px - 50%)`;
+        }
+    }
+    
+    function received(){
+        openingSong(false);
+        document.getElementById('bucin').style.display = 'none';
+        videoBucin();
+    }
+    
+    function videoBucin(){
+        const videoBox = document.getElementById('video-box');
+        videoBox.style.display = 'flex';
+        const video = document.getElementById('myVideo');
+        video.play();
+        video.addEventListener('ended', myHandler, false);
+        function myHandler(e) {
+            // What you want to do after the event
+            videoBox.style.display = 'none';
+            mainPage();
+            endingSong();
+        }
+    }
+    
+    function openingSong(isStart = true){
+        const audio = document.getElementById('startsong');
+        audio.volume = 0.7;
+        isStart ? audio.play() : audio.pause();
+    }
+    
+    function endingSong(isStart = true){
+        const audio = document.getElementById('endAudio');
+        audio.volume = 0.3;
+        if(isStart){
+            audio.play();
+        }else{
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    }
+    
+    function mainPage(){
+        endingSong()
+        const container = document.getElementById('container');
+        container.style.backgroundColor = 'transparent';
+        document.getElementById('main').style.display = "flex";
+        const name = localStorage.getItem('name');
+        console.name
+        document.getElementById('myName').innerText = name;
+    }
+    
+    function greetings(time){
+        document.getElementById('greet').innerText = `Good ${time}, ${localStorage.getItem('name')}`;
+    }
+    
+    function setDates(){
+        const now = new Date();
+    	const dStr = now.getDay();
+    	const month = now.getMonth();
+    	const dNum = now.getDate();
+    	const year = now.getFullYear();
+    	let hour = now.getHours();
+    	let min = now.getMinutes();
+    	let pe = 'AM';
+    	
+    	if(hour >= 6 && hour < 12){
+    		greetings('Morning');
+    	}
+    	if(hour >= 12 && hour < 18){
+    		greetings('Afternoon');
+    	}
+    	if(hour >= 18 || hour >= 0){
+    		greetings('Evening');
+    	}
+    	
+    	if(hour > 12){
+    	    hour -= 12;
+    	    pe = 'PM'
+    	}
+    	if(hour == 0) hour = 12;
+    	
+    	if(hour < 10) hour = '0'+hour;
+    	if(min < 10) min = '0'+min;
+    	
+    	const time = document.getElementById('time');
+    	time.innerText = `${hour}:${min} ${pe}`;
+    	const weekDay = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    	const date = document.getElementById('date');
+    	date.innerText = `${weekDay[dStr]}, ${months[month]} ${dNum} ${year}`;
+    }
+    const inputSearch = document.querySelector('.inputSearch');
+        inputSearch.addEventListener('keyup', e => {
+            if(inputSearch.value != ''){
+                if(e.keyCode == 13){
+                    document.getElementById('button-search').click();
+                }
+            }
+        });
+        document.getElementById('button-search').onclick = function(e){
+            search(inputSearch.value);
+        }
+        
+    function search(value){
+        if(value == '') return;
+        window.location.href = 'https://www.google.com/search?q='+value;
+    }
+    
+    async function getQuote(){
+        const data = await fetch('https://api.quotable.io/random');
+        const {author, content} = await data.json();
+        document.getElementById('quote').innerText = `${content} - ${author}`;
+    }
+    getQuote();
+    
+    function editName(){
+        const name = document.getElementById('myName');
+        name.remove();
+        console.log('clicked')
+        const inputElement = document.createElement('input');
+        inputElement.className = 'toggle';
+        inputElement.id = 'setName';
+        inputElement.autofocus = true;
+        document.getElementById('bar').prepend(inputElement);
+        inputElement.addEventListener('keypress', e => {
+            if(e.keyCode == 13) setNewName();
+        });
+    }
+    
+    function setNewName(){
+        const inputNameBar = document.getElementById('setName');
+        localStorage.setItem('name', inputNameBar.value);
+        inputNameBar.remove();
+        const span = document.createElement('span');
+        span.onclick = () => editName();
+        span.id = 'myName';
+        span.className = 'toggle';
+        span.innerText = localStorage.getItem('name');
+        document.getElementById('bar').prepend(span);
+    }
+    
+    function restart(){
+        endingSong(false);
+        document.getElementById('main').style.display = 'none';
+        document.getElementById('container').style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        document.querySelector('.modal').style.display = 'block';
+        localStorage.clear();
+    }
+    
+    </script>
+</body>
+</html>
